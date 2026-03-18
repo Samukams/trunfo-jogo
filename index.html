@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trunfo Dino</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --sandy-brown: #fa9f42ff;
+    --muted-teal: #94a89aff;
+    --pine-teal: #294936ff;
+    --prussian-blue: #0d2149ff;
+    --dark-wine: #721817ff;
+    --card-w: 240px;
+    --card-h: 420px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Barlow', sans-serif;
+    background-color: var(--prussian-blue);
+    color: #fff;
+    min-height: 100vh;
+    overflow-x: hidden;
+    background-image:
+      radial-gradient(ellipse at 20% 50%, rgba(41,73,54,0.4) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 20%, rgba(13,33,73,0.8) 0%, transparent 50%),
+      url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.02'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+
+  /* ===== SETUP SCREEN ===== */
+  #setup-screen {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 2rem;
+  }
+
+  .setup-box {
+    background: linear-gradient(145deg, rgba(255,255,255,0.07), rgba(255,255,255,0.02));
+    border: 1px solid rgba(250,159,66,0.3);
+    border-radius: 4px;
+    padding: 3rem 2.5rem;
+    width: 100%;
+    max-width: 500px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .setup-box::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--dark-wine), var(--sandy-brown), var(--pine-teal));
+  }
+
+  .setup-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 4rem;
+    letter-spacing: 4px;
+    color: var(--sandy-brown);
+    text-align: center;
+    line-height: 1;
+    margin-bottom: 0.25rem;
+    text-shadow: 0 0 40px rgba(250,159,66,0.4);
+  }
+
+  .setup-subtitle {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.85rem;
+    letter-spacing: 6px;
+    color: var(--muted-teal);
+    text-align: center;
+    text-transform: uppercase;
+    margin-bottom: 2.5rem;
+  }
+
+  .form-row { margin-bottom: 1.25rem; }
+
+  .form-row label {
+    display: block;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--muted-teal);
+    margin-bottom: 0.4rem;
+  }
+
+  .form-row input {
+    width: 100%;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(148,168,154,0.3);
+    border-radius: 2px;
+    padding: 0.75rem 1rem;
+    color: #fff;
+    font-family: 'Barlow', sans-serif;
+    font-size: 1rem;
+    transition: border-color 0.2s;
+    outline: none;
+  }
+
+  .form-row input:focus { border-color: var(--sandy-brown); }
+  .form-row input.error { border-color: var(--dark-wine); }
+
+  .error-msg {
+    font-size: 0.75rem;
+    color: #ff6b6b;
+    margin-top: 0.3rem;
+    display: none;
+  }
+  .error-msg.visible { display: block; }
+
+  .form-divider {
+    display: flex;
+    gap: 1rem;
+  }
+  .form-divider .form-row { flex: 1; }
+
+  .mode-selector {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .mode-btn {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(148,168,154,0.3);
+    border-radius: 2px;
+    padding: 1rem;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s;
+  }
+
+  .mode-btn:hover { background: rgba(255,255,255,0.08); }
+
+  .mode-btn.active {
+    background: rgba(250,159,66,0.1);
+    border-color: var(--sandy-brown);
+  }
+
+  .mode-btn .mode-icon { font-size: 1.5rem; margin-bottom: 0.4rem; }
+
+  .mode-btn .mode-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted-teal);
+  }
+
+  .mode-btn.active .mode-label { color: var(--sandy-brown); }
+
+  .start-btn {
+    width: 100%;
+    background: var(--sandy-brown);
+    color: var(--prussian-blue);
+    border: none;
+    border-radius: 2px;
+    padding: 1rem;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 0.5rem;
+  }
+
+  .start-btn:hover {
+    background: #ffb347;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(250,159,66,0.3);
+  }
+
+  /* ===== GAME SCREEN ===== */
+  #game-screen {
+    display: none;
+    flex-direction: column;
+    height: 100vh;
+    max-height: 100vh;
+    padding: 1rem 1.5rem;
+    overflow: hidden;
+  }
+
+  .game-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid rgba(148,168,154,0.2);
+    gap: 0.5rem;
+    flex-wrap: nowrap;
+    overflow: hidden;
+  }
+
+  .game-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 3px;
+    color: var(--sandy-brown);
+    flex-shrink: 0;
+  }
+
+  .turn-indicator {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    background: rgba(250,159,66,0.15);
+    border: 1px solid rgba(250,159,66,0.4);
+    border-radius: 2px;
+    padding: 0.4rem 0.75rem;
+    color: var(--sandy-brown);
+    transition: all 0.3s;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 300px;
+  }
+
+  .quit-btn {
+    background: transparent;
+    border: 1px solid rgba(114,24,23,0.5);
+    color: var(--dark-wine);
+    border-radius: 2px;
+    padding: 0.4rem 1rem;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .quit-btn:hover { background: rgba(114,24,23,0.2); }
+
+  .game-arena {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 2rem;
+    flex: 1;
+    padding: 0.5rem 0;
+    overflow: hidden;
+    min-height: 0;
+  }
+
+  /* ===== PLAYER PANEL ===== */
+  .player-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+    width: var(--card-w);
+    height: 100%;
+  }
+
+  .player-info {
+    text-align: center;
+    width: 100%;
+  }
+
+  .player-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    letter-spacing: 3px;
+    color: #fff;
+    border-radius: 4px;
+    padding: 0.1rem 0.6rem;
+    transition: box-shadow 0.3s, color 0.3s;
+  }
+
+  .player-name.active-player {
+    color: var(--sandy-brown);
+    box-shadow: 0 0 0 2px var(--sandy-brown), 0 0 18px 4px rgba(250,159,66,0.45);
+  }
+
+  .attr-key {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 1px;
+    color: var(--sandy-brown);
+    background: rgba(250,159,66,0.12);
+    border: 1px solid rgba(250,159,66,0.35);
+    border-radius: 2px;
+    padding: 0 3px;
+    margin-right: 5px;
+    vertical-align: middle;
+  }
+
+  .player-count {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--muted-teal);
+  }
+
+  .player-count span {
+    color: var(--sandy-brown);
+    font-size: 1rem;
+    font-weight: 700;
+  }
+
+  /* ===== CARD ===== */
+  .card-wrapper {
+    width: var(--card-w);
+    flex: 1;
+    min-height: 0;
+    perspective: 1000px;
+  }
+
+  .card {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 8px;
+  }
+
+  .card.flipped { transform: rotateY(180deg); }
+
+  .card-face {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  /* Card Back */
+  .card-back {
+    background: linear-gradient(135deg, var(--pine-teal), var(--prussian-blue));
+    border: 2px solid rgba(148,168,154,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .card-back-inner {
+    text-align: center;
+    opacity: 0.5;
+  }
+
+  .card-back-inner .dino-icon { font-size: 4rem; }
+
+  .card-back-inner p {
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 4px;
+    font-size: 1rem;
+    color: var(--muted-teal);
+    margin-top: 0.5rem;
+  }
+
+  /* Card Front */
+  .card-front {
+    transform: rotateY(180deg);
+    background: linear-gradient(160deg, #1a3a2a, var(--prussian-blue));
+    border: 2px solid rgba(250,159,66,0.4);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .card-header {
+    background: linear-gradient(90deg, var(--pine-teal), rgba(41,73,54,0.5));
+    padding: 0.6rem 0.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(250,159,66,0.2);
+  }
+
+  .card-dino-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+    color: var(--sandy-brown);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 160px;
+  }
+
+  .card-tipo {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    background: rgba(250,159,66,0.15);
+    border: 1px solid rgba(250,159,66,0.3);
+    border-radius: 2px;
+    padding: 0.2rem 0.4rem;
+    color: var(--sandy-brown);
+    white-space: nowrap;
+  }
+
+  .card-image {
+    width: 100%;
+    height: 130px;
+    background: rgba(0,0,0,0.3);
+    flex-shrink: 0;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+    display: block;
+    background: rgba(0,0,0,0.2);
+  }
+
+  .card-attrs {
+    flex: 1;
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    overflow-y: auto;
+  }
+
+  .attr-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.4rem 0.6rem;
+    border-radius: 3px;
+    border: 1px solid rgba(148,168,154,0.15);
+    background: rgba(255,255,255,0.03);
+    cursor: default;
+    transition: all 0.15s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .attr-row.clickable {
+    cursor: pointer;
+  }
+
+  .attr-row.clickable:hover {
+    background: rgba(250,159,66,0.12);
+    border-color: rgba(250,159,66,0.5);
+    transform: translateX(2px);
+  }
+
+  .attr-row.winner {
+    background: rgba(250,159,66,0.2);
+    border-color: var(--sandy-brown);
+  }
+
+  .attr-row.loser {
+    background: rgba(114,24,23,0.15);
+    border-color: rgba(114,24,23,0.4);
+    opacity: 0.6;
+  }
+
+  .attr-row.draw-attr {
+    background: rgba(148,168,154,0.1);
+    border-color: rgba(148,168,154,0.4);
+  }
+
+  .attr-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted-teal);
+  }
+
+  .attr-value {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 1px;
+    color: #fff;
+  }
+
+  /* ===== CENTER PANEL ===== */
+  .center-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    min-width: 160px;
+    height: 100%;
+  }
+
+  .vs-badge {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3rem;
+    letter-spacing: 4px;
+    color: var(--dark-wine);
+    text-shadow: 0 0 20px rgba(114,24,23,0.5);
+    line-height: 1;
+  }
+
+  .result-box {
+    text-align: center;
+    min-height: 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .result-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem;
+    letter-spacing: 3px;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.4s;
+  }
+
+  .result-title.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .result-title.win { color: var(--sandy-brown); }
+  .result-title.draw { color: var(--muted-teal); }
+
+  .result-sub {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted-teal);
+    opacity: 0;
+    transition: opacity 0.4s 0.2s;
+  }
+  .result-sub.visible { opacity: 1; }
+
+  .pending-cards {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted-teal);
+    background: rgba(148,168,154,0.1);
+    border: 1px solid rgba(148,168,154,0.2);
+    border-radius: 2px;
+    padding: 0.3rem 0.6rem;
+    display: none;
+  }
+
+  .pending-cards.visible { display: block; }
+
+  .next-btn {
+    background: var(--pine-teal);
+    color: #fff;
+    border: 1px solid rgba(148,168,154,0.3);
+    border-radius: 2px;
+    padding: 0.6rem 1.5rem;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.8rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .next-btn.visible {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .next-btn:hover {
+    background: rgba(41,73,54,0.8);
+    border-color: var(--muted-teal);
+  }
+
+  /* ===== WIN SCREEN ===== */
+  #win-screen {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    text-align: center;
+    padding: 2rem;
+  }
+
+  .win-box {
+    max-width: 480px;
+  }
+
+  .win-trophy { font-size: 5rem; margin-bottom: 1rem; animation: bounce 1s ease infinite alternate; }
+
+  @keyframes bounce {
+    from { transform: translateY(0); }
+    to { transform: translateY(-15px); }
+  }
+
+  .win-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 5rem;
+    letter-spacing: 6px;
+    color: var(--sandy-brown);
+    text-shadow: 0 0 40px rgba(250,159,66,0.5);
+    line-height: 1;
+  }
+
+  .win-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.5rem;
+    letter-spacing: 4px;
+    color: #fff;
+    margin: 0.5rem 0 2rem;
+  }
+
+  .play-again-btn {
+    background: var(--sandy-brown);
+    color: var(--prussian-blue);
+    border: none;
+    border-radius: 2px;
+    padding: 1rem 3rem;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .play-again-btn:hover {
+    background: #ffb347;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(250,159,66,0.3);
+  }
+
+  /* ===== TOAST ===== */
+  #toast {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: rgba(13,33,73,0.95);
+    border: 1px solid rgba(250,159,66,0.4);
+    border-radius: 4px;
+    padding: 0.75rem 1.5rem;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.85rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--sandy-brown);
+    transition: transform 0.3s;
+    z-index: 999;
+    white-space: nowrap;
+  }
+
+  #toast.show { transform: translateX(-50%) translateY(0); }
+
+  /* Loading */
+  .loading-overlay {
+    position: fixed;
+    inset: 0;
+    background: var(--prussian-blue);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    z-index: 100;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+  }
+
+  .loading-overlay.visible { opacity: 1; pointer-events: all; }
+
+  .loading-dino { font-size: 3rem; animation: spin 1s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .loading-text {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.8rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--muted-teal);
+  }
+
+  @media (max-width: 768px) {
+    :root { --card-w: 200px; --card-h: 340px; }
+    .game-arena { gap: 1.5rem; }
+    .center-panel { min-width: 100px; }
+    .vs-badge { font-size: 2rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- LOADING -->
+<div class="loading-overlay" id="loading">
+  <div class="loading-dino">🦕</div>
+  <p class="loading-text">Carregando dinos...</p>
+</div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<!-- SETUP SCREEN -->
+<div id="setup-screen">
+  <div class="setup-box">
+    <h1 class="setup-title">Trunfo</h1>
+    <p class="setup-subtitle">Batalha de Dinossauros</p>
+
+    <div class="form-divider">
+      <div class="form-row">
+        <label>Jogador 1</label>
+        <input type="text" id="p1-name" placeholder="Nome..." maxlength="16">
+      </div>
+      <div class="form-row">
+        <label>Jogador 2</label>
+        <input type="text" id="p2-name" placeholder="Nome..." maxlength="16">
+      </div>
+    </div>
+
+    <div class="form-row">
+      <label>Quantidade de Cartas (número par)</label>
+      <input type="number" id="card-count" placeholder="Ex: 10" min="2" max="100" step="2" value="10">
+      <p class="error-msg" id="count-error">Digite um número par e maior que 0.</p>
+    </div>
+
+    <div class="form-row">
+      <label>Modo de Jogo</label>
+      <div class="mode-selector">
+        <div class="mode-btn active" data-mode="random" onclick="selectMode('random')">
+          <div class="mode-icon">🎲</div>
+          <div class="mode-label">Aleatório</div>
+        </div>
+        <div class="mode-btn" data-mode="top" onclick="selectMode('top')">
+          <div class="mode-icon">⭐</div>
+          <div class="mode-label">Mais Famosos</div>
+        </div>
+      </div>
+    </div>
+
+    <button class="start-btn" onclick="startGame()">Iniciar Jogo</button>
+  </div>
+</div>
+
+<!-- GAME SCREEN -->
+<div id="game-screen">
+  <div class="game-header">
+    <div class="game-logo">🦖 Trunfo</div>
+    <div class="turn-indicator" id="turn-indicator">Vez de —</div>
+    <button class="quit-btn" onclick="quitGame()">Sair</button>
+  </div>
+
+  <div class="game-arena">
+    <!-- Player 1 -->
+    <div class="player-panel" id="panel-p1">
+      <div class="player-info">
+        <div class="player-name" id="label-p1">Jogador 1</div>
+        <div class="player-count">Cartas: <span id="count-p1">0</span></div>
+      </div>
+      <div class="card-wrapper">
+        <div class="card" id="card-p1">
+          <div class="card-face card-back">
+            <div class="card-back-inner">
+              <div class="dino-icon">🦕</div>
+              <p>TRUNFO DINO</p>
+            </div>
+          </div>
+          <div class="card-face card-front" id="front-p1">
+            <div class="card-header">
+              <span class="card-dino-name" id="name-p1">—</span>
+              <span class="card-tipo" id="tipo-p1">—</span>
+            </div>
+            <div class="card-image" id="img-p1">🦕</div>
+            <div class="card-attrs" id="attrs-p1"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Center -->
+    <div class="center-panel">
+      <div class="vs-badge">VS</div>
+      <div class="result-box">
+        <div class="result-title" id="result-title"></div>
+        <div class="result-sub" id="result-sub"></div>
+        <div class="pending-cards" id="pending-label"></div>
+      </div>
+      <button class="next-btn" id="next-btn" onclick="nextRound()">Próxima ›</button>
+    </div>
+
+    <!-- Player 2 -->
+    <div class="player-panel" id="panel-p2">
+      <div class="player-info">
+        <div class="player-name" id="label-p2">Jogador 2</div>
+        <div class="player-count">Cartas: <span id="count-p2">0</span></div>
+      </div>
+      <div class="card-wrapper">
+        <div class="card" id="card-p2">
+          <div class="card-face card-back">
+            <div class="card-back-inner">
+              <div class="dino-icon">🦖</div>
+              <p>TRUNFO DINO</p>
+            </div>
+          </div>
+          <div class="card-face card-front" id="front-p2">
+            <div class="card-header">
+              <span class="card-dino-name" id="name-p2">—</span>
+              <span class="card-tipo" id="tipo-p2">—</span>
+            </div>
+            <div class="card-image" id="img-p2">🦖</div>
+            <div class="card-attrs" id="attrs-p2"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- WIN SCREEN -->
+<div id="win-screen">
+  <div class="win-box">
+    <div class="win-trophy">🏆</div>
+    <div class="win-title">Vitória!</div>
+    <div class="win-name" id="winner-name"></div>
+    <button class="play-again-btn" onclick="playAgain()">Jogar Novamente</button>
+  </div>
+</div>
+
+<script>
+  const ATTRS = [
+    { key: 'altura',        label: 'Altura (m)' },
+    { key: 'comprimento',   label: 'Comprimento (m)' },
+    { key: 'peso',          label: 'Peso (kg)' },
+    { key: 'velocidade',    label: 'Velocidade (km/h)' },
+    { key: 'agilidade',     label: 'Agilidade' },
+    { key: 'longevidade',   label: 'Longevidade' },
+    { key: 'numero_magico', label: 'Nº Mágico' },
+  ];
+
+  // Estado global do jogo
+  let state = {
+    p1Name: '', p2Name: '',
+    deck1: [], deck2: [],
+    pending: [],      // cartas na mesa por empate
+    turn: 1,          // quem escolhe o atributo (1 ou 2)
+    phase: 'choose',  // 'choose' | 'reveal'
+    chosenAttr: null,
+    gameMode: 'random',
+  };
+
+  // ─── SETUP ───────────────────────────────────────────────────────────────────
+
+  function selectMode(mode) {
+    state.gameMode = mode;
+    document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+    document.querySelector(`[data-mode="${mode}"]`).classList.add('active');
+  }
+
+  async function startGame() {
+    const p1 = document.getElementById('p1-name').value.trim() || 'Jogador 1';
+    const p2 = document.getElementById('p2-name').value.trim() || 'Jogador 2';
+    const n  = parseInt(document.getElementById('card-count').value);
+    const errEl     = document.getElementById('count-error');
+    const countInput = document.getElementById('card-count');
+
+    if (!n || n < 2 || n % 2 !== 0) {
+      countInput.classList.add('error');
+      errEl.classList.add('visible');
+      return;
+    }
+    countInput.classList.remove('error');
+    errEl.classList.remove('visible');
+
+    showLoading(true);
+    try {
+      const url = state.gameMode === 'random'
+        ? `http://localhost:3000/dinos/random/${n}`
+        : `http://localhost:3000/dinos/top/fama/${n}`;
+
+      const res = await fetch(url);
+      if (!res.ok) throw new Error();
+      const dinos = await res.json();
+
+      if (dinos.length < n) {
+        showToast(`Apenas ${dinos.length} dinos disponíveis!`);
+        showLoading(false);
+        return;
+      }
+
+      // Aleatoriza numero_magico (1–10) para todas as cartas
+      dinos.forEach(d => { d.numero_magico = Math.floor(Math.random() * 10) + 1; });
+
+      const half = n / 2;
+      state.p1Name     = p1;
+      state.p2Name     = p2;
+      state.deck1      = dinos.slice(0, half);
+      state.deck2      = dinos.slice(half);
+      state.pending    = [];
+      state.turn       = 1;   // P1 sempre começa
+      state.phase      = 'choose';
+      state.chosenAttr = null;
+
+      showLoading(false);
+      switchScreen('game');
+      renderGame();
+    } catch (e) {
+      showLoading(false);
+      showToast('Erro ao conectar com o servidor!');
+    }
+  }
+
+  // ─── RENDER ──────────────────────────────────────────────────────────────────
+
+  function renderGame() {
+    document.getElementById('label-p1').textContent = state.p1Name;
+    document.getElementById('label-p2').textContent = state.p2Name;
+    updateCounts();
+
+    const activeName = state.turn === 1 ? state.p1Name : state.p2Name;
+    document.getElementById('turn-indicator').textContent = `Vez de ${activeName}`;
+
+    // Glow no jogador da vez
+    document.getElementById('label-p1').classList.toggle('active-player', state.turn === 1);
+    document.getElementById('label-p2').classList.toggle('active-player', state.turn === 2);
+
+    // Carta do jogador da vez → frente | oponente → verso
+    renderCard(1, state.deck1[0], state.turn === 1);
+    renderCard(2, state.deck2[0], state.turn === 2);
+
+    resetResult();
+
+    // Mostra aviso de cartas em disputa se houver empate anterior
+    if (state.pending.length > 0) {
+      const pendEl = document.getElementById('pending-label');
+      pendEl.textContent = `⚔️ ${state.pending.length} carta(s) em disputa na mesa!`;
+      pendEl.classList.add('visible');
+    }
+  }
+
+  function renderCard(player, dino, showFront) {
+    const cardEl  = document.getElementById(`card-p${player}`);
+    const attrsEl = document.getElementById(`attrs-p${player}`);
+    // Só o jogador da vez pode clicar, e só na fase 'choose'
+    const isActive = (state.turn === player) && (state.phase === 'choose');
+
+    if (showFront) {
+      document.getElementById(`name-p${player}`).textContent = dino.nome;
+      document.getElementById(`tipo-p${player}`).textContent = dino.tipo || '?';
+      setCardImage(document.getElementById(`img-p${player}`), dino.nome);
+
+      attrsEl.innerHTML = '';
+      let kbIdx = 1;
+      ATTRS.forEach(attr => {
+        const val = dino[attr.key];
+        if (val === null || val === undefined) return;
+        const row = document.createElement('div');
+        row.className = 'attr-row' + (isActive ? ' clickable' : '');
+        row.dataset.attr     = attr.key;
+        row.dataset.kbindex  = kbIdx;
+        const hint = isActive ? `<span class="attr-key">[${kbIdx}]</span>` : '';
+        row.innerHTML = `<span class="attr-label">${hint}${attr.label}</span><span class="attr-value">${val}</span>`;
+        if (isActive) row.onclick = () => chooseAttr(attr.key);
+        attrsEl.appendChild(row);
+        kbIdx++;
+      });
+
+      cardEl.classList.add('flipped');
+    } else {
+      cardEl.classList.remove('flipped');
+    }
+  }
+
+  // ─── IMAGEM ──────────────────────────────────────────────────────────────────
+
+  function setCardImage(container, nome) {
+    const base = 'https://raw.githubusercontent.com/rafaellindemann/trunfo-dino/main/imgs';
+    const enc  = encodeURIComponent(nome);
+    const urls = [
+      `${base}/${enc}.png`,
+      `${base}/balaio/${enc}.png`,
+      `${base}/${enc.toLowerCase()}.png`,
+      `${base}/balaio/${enc.toLowerCase()}.png`,
+    ];
+    let idx = 0;
+    const img = document.createElement('img');
+    img.alt = nome;
+    img.style.cssText = 'width:100%;height:100%;object-fit:contain;display:block;';
+    img.onerror = function () {
+      idx++;
+      if (idx < urls.length) {
+        this.src = urls[idx];
+      } else {
+        this.onerror = null;
+        this.src = 'dino.svg';
+        this.style.cssText = 'width:55%;height:55%;object-fit:contain;display:block;margin:auto;opacity:0.3;';
+      }
+    };
+    img.src = urls[0];
+    container.innerHTML = '';
+    container.appendChild(img);
+  }
+
+  // ─── LÓGICA DE JOGO ──────────────────────────────────────────────────────────
+
+  function chooseAttr(attrKey) {
+    if (state.phase !== 'choose') return;
+    state.chosenAttr = attrKey;
+    state.phase = 'reveal';
+
+    const opIdx      = state.turn === 1 ? 2 : 1;
+    const activeDino   = state.turn === 1 ? state.deck1[0] : state.deck2[0];
+    const opponentDino = state.turn === 1 ? state.deck2[0] : state.deck1[0];
+
+    // Revela a carta do oponente
+    document.getElementById(`name-p${opIdx}`).textContent = opponentDino.nome;
+    document.getElementById(`tipo-p${opIdx}`).textContent = opponentDino.tipo || '?';
+    setCardImage(document.getElementById(`img-p${opIdx}`), opponentDino.nome);
+
+    const opAttrsEl = document.getElementById(`attrs-p${opIdx}`);
+    opAttrsEl.innerHTML = '';
+    ATTRS.forEach(attr => {
+      const val = opponentDino[attr.key];
+      if (val === null || val === undefined) return;
+      const row = document.createElement('div');
+      row.className    = 'attr-row';
+      row.dataset.attr = attr.key;
+      row.innerHTML    = `<span class="attr-label">${attr.label}</span><span class="attr-value">${val}</span>`;
+      opAttrsEl.appendChild(row);
+    });
+    document.getElementById(`card-p${opIdx}`).classList.add('flipped');
+
+    // Compara valores
+    const vA = parseFloat(activeDino[attrKey]);
+    const vO = parseFloat(opponentDino[attrKey]);
+
+    setTimeout(() => {
+      highlightAttr(attrKey, vA, vO);
+      showResult(vA, vO);
+    }, 400);
+  }
+
+  function highlightAttr(attrKey, vA, vO) {
+    const aIdx = state.turn;
+    const oIdx = state.turn === 1 ? 2 : 1;
+    [[aIdx, vA, vO], [oIdx, vO, vA]].forEach(([p, mine, other]) => {
+      document.querySelectorAll(`#attrs-p${p} .attr-row`).forEach(row => {
+        if (row.dataset.attr !== attrKey) return;
+        if      (mine > other) row.classList.add('winner');
+        else if (mine < other) row.classList.add('loser');
+        else                   row.classList.add('draw-attr');
+      });
+    });
+  }
+
+  function showResult(vA, vO) {
+    const titleEl   = document.getElementById('result-title');
+    const subEl     = document.getElementById('result-sub');
+    const pendEl    = document.getElementById('pending-label');
+    const nextBtn   = document.getElementById('next-btn');
+    const attrLabel = ATTRS.find(a => a.key === state.chosenAttr)?.label || state.chosenAttr;
+    const activeName   = state.turn === 1 ? state.p1Name : state.p2Name;
+    const opponentName = state.turn === 1 ? state.p2Name : state.p1Name;
+
+    if (vA > vO) {
+      // Jogador da vez venceu a mão
+      titleEl.textContent = `${activeName} venceu!`;
+      titleEl.className   = 'result-title win visible';
+      subEl.textContent   = `${attrLabel} decisivo`;
+      if (state.pending.length > 0) {
+        pendEl.textContent = `⚔️ +${state.pending.length} cartas da mesa também!`;
+        pendEl.classList.add('visible');
+      }
+    } else if (vO > vA) {
+      // Oponente venceu a mão
+      titleEl.textContent = `${opponentName} venceu!`;
+      titleEl.className   = 'result-title win visible';
+      subEl.textContent   = `${attrLabel} decisivo`;
+      if (state.pending.length > 0) {
+        pendEl.textContent = `⚔️ +${state.pending.length} cartas da mesa também!`;
+        pendEl.classList.add('visible');
+      }
+    } else {
+      // Empate — cartas ficam na mesa, mesmo jogador escolhe próxima
+      const total = state.pending.length + 2;
+      titleEl.textContent = 'Empate!';
+      titleEl.className   = 'result-title draw visible';
+      subEl.textContent   = `${total} carta(s) na mesa. Próxima decide!`;
+      pendEl.classList.remove('visible');
+    }
+
+    subEl.classList.add('visible');
+    nextBtn.classList.add('visible');
+  }
+
+  function nextRound() {
+    // Captura cartas e valores ANTES de qualquer mudança
+    const activeDino   = state.turn === 1 ? state.deck1[0] : state.deck2[0];
+    const opponentDino = state.turn === 1 ? state.deck2[0] : state.deck1[0];
+    const vA = parseFloat(activeDino[state.chosenAttr]);
+    const vO = parseFloat(opponentDino[state.chosenAttr]);
+
+    // Remove a carta do topo de cada baralho
+    state.deck1.shift();
+    state.deck2.shift();
+
+    if (vA > vO) {
+      // ✅ Jogador da vez venceu:
+      // Leva pending + sua carta + carta do oponente, coloca no fundo do seu baralho
+      // Turno permanece com ele (vencedor escolhe próxima)
+      const winnerDeck = state.turn === 1 ? state.deck1 : state.deck2;
+      winnerDeck.push(...state.pending, activeDino, opponentDino);
+      state.pending = [];
+      // state.turn não muda
+
+    } else if (vO > vA) {
+      // ✅ Oponente venceu:
+      // Turno passa para o oponente, que leva pending + carta do ativo + sua carta
+      state.turn = state.turn === 1 ? 2 : 1;
+      const winnerDeck = state.turn === 1 ? state.deck1 : state.deck2;
+      winnerDeck.push(...state.pending, opponentDino, activeDino);
+      state.pending = [];
+
+    } else {
+      // ✅ Empate:
+      // Cartas ficam na mesa (pending), mesmo jogador da vez escolhe próxima carta
+      // state.turn não muda
+      state.pending.push(activeDino, opponentDino);
+    }
+
+    state.phase      = 'choose';
+    state.chosenAttr = null;
+
+    // Verifica vitória
+    if (state.deck1.length === 0) { endGame(state.p2Name); return; }
+    if (state.deck2.length === 0) { endGame(state.p1Name); return; }
+
+    renderGame();
+  }
+
+  // ─── UTILITÁRIOS ─────────────────────────────────────────────────────────────
+
+  function resetResult() {
+    document.getElementById('result-title').className = 'result-title';
+    document.getElementById('result-sub').className   = 'result-sub';
+    document.getElementById('pending-label').classList.remove('visible');
+    document.getElementById('next-btn').classList.remove('visible');
+  }
+
+  function updateCounts() {
+    document.getElementById('count-p1').textContent = state.deck1.length;
+    document.getElementById('count-p2').textContent = state.deck2.length;
+  }
+
+  function endGame(winnerName) {
+    document.getElementById('winner-name').textContent = winnerName;
+    switchScreen('win');
+  }
+
+  function quitGame() {
+    if (confirm('Sair do jogo atual?')) playAgain();
+  }
+
+  function playAgain() {
+    switchScreen('setup');
+    document.getElementById('p1-name').value    = '';
+    document.getElementById('p2-name').value    = '';
+    document.getElementById('card-count').value = '10';
+  }
+
+  function switchScreen(name) {
+    document.getElementById('setup-screen').style.display = name === 'setup' ? 'flex' : 'none';
+    document.getElementById('game-screen').style.display  = name === 'game'  ? 'flex' : 'none';
+    document.getElementById('win-screen').style.display   = name === 'win'   ? 'flex' : 'none';
+  }
+
+  function showLoading(v) {
+    document.getElementById('loading').classList.toggle('visible', v);
+  }
+
+  let toastTimer;
+  function showToast(msg) {
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => el.classList.remove('show'), 3000);
+  }
+
+  // Teclado: pressionar [1]–[7] seleciona atributo
+  document.addEventListener('keydown', e => {
+    if (state.phase !== 'choose') return;
+    const num = parseInt(e.key);
+    if (isNaN(num) || num < 1) return;
+    const panel = document.getElementById(`attrs-p${state.turn}`);
+    const row   = panel ? panel.querySelector(`[data-kbindex="${num}"]`) : null;
+    if (row) chooseAttr(row.dataset.attr);
+  });
+</script>
+</body>
+</html>
